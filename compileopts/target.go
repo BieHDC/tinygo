@@ -359,6 +359,11 @@ func defaultTarget(goos, goarch, triple string) (*TargetSpec, error) {
 		// For more discussion:
 		// https://groups.google.com/g/Golang-nuts/c/Jd9tlNc6jUE/m/Zo-7zIP_m3MJ?pli=1
 		switch goarch {
+		case "386":
+			spec.LDFlags = append(spec.LDFlags,
+				"-m", "i386pe",
+				"--image-base", "0x400000",
+			)
 		case "amd64":
 			spec.LDFlags = append(spec.LDFlags,
 				"-m", "i386pep",
@@ -396,7 +401,7 @@ func defaultTarget(goos, goarch, triple string) (*TargetSpec, error) {
 	}
 	if goarch != "wasm" {
 		suffix := ""
-		if goos == "windows" && goarch == "amd64" {
+		if goos == "windows" && (goarch == "amd64" || goarch == "386") {
 			// Windows uses a different calling convention on amd64 from other
 			// operating systems so we need separate assembly files.
 			suffix = "_windows"
