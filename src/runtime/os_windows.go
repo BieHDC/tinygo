@@ -4,8 +4,8 @@ import "unsafe"
 
 const GOOS = "windows"
 
-//export GetModuleHandleExA
-func _GetModuleHandleExA(dwFlags uint32, lpModuleName unsafe.Pointer, phModule **exeHeader) bool
+//export GetModuleHandleA
+func _GetModuleHandleA(lpModuleName unsafe.Pointer) *exeHeader
 
 // MS-DOS stub with PE header offset:
 // https://docs.microsoft.com/en-us/windows/win32/debug/pe-format#ms-dos-stub-image-only
@@ -55,9 +55,6 @@ var module *exeHeader
 func findGlobals(found func(start, end uintptr)) {
 	// Constants used in this function.
 	const (
-		// https://docs.microsoft.com/en-us/windows/win32/api/libloaderapi/nf-libloaderapi-getmodulehandleexa
-		GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT = 0x00000002
-
 		// https://docs.microsoft.com/en-us/windows/win32/debug/pe-format
 		IMAGE_SCN_MEM_WRITE = 0x80000000
 	)
@@ -66,8 +63,8 @@ func findGlobals(found func(start, end uintptr)) {
 		// Obtain a handle to the currently executing image. What we're getting
 		// here is really just __ImageBase, but it's probably better to obtain
 		// it using GetModuleHandle to account for ASLR etc.
-		result := _GetModuleHandleExA(GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT, nil, &module)
-		if gcAsserts && (!result || module.signature != 0x5A4D) { // 0x4D5A is "MZ"
+		module = _GetModuleHandleA(nil)
+		if gcAsserts && (module == nil || module.signature != 0x5A4D) { // 0x4D5A is "MZ"
 			runtimePanic("cannot get module handle")
 		}
 	}
