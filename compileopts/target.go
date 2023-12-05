@@ -300,8 +300,8 @@ func defaultTarget(goos, goarch, triple string) (*TargetSpec, error) {
 	}
 	switch goarch {
 	case "386":
-		spec.CPU = "pentium4"
-		spec.Features = "+cx8,+fxsr,+mmx,+sse,+sse2,+x87"
+		spec.CPU = "i386" //fixme for w98 and old pcs downgrade, or make another target
+		spec.Features = "" //"+cx8,+fxsr,+mmx,+sse,+sse2,+x87"
 	case "amd64":
 		spec.CPU = "x86-64"
 		spec.Features = "+cx8,+fxsr,+mmx,+sse,+sse2,+x87"
@@ -363,6 +363,11 @@ func defaultTarget(goos, goarch, triple string) (*TargetSpec, error) {
 			spec.LDFlags = append(spec.LDFlags,
 				"-m", "i386pe",
 				"--image-base", "0x400000",
+				"--major-os-version", "4",
+				"--minor-os-version", "0",
+				"--major-subsystem-version", "4",
+				"--minor-subsystem-version", "0",
+
 			)
 		case "amd64":
 			spec.LDFlags = append(spec.LDFlags,
