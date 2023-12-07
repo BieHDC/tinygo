@@ -363,12 +363,11 @@ func defaultTarget(goos, goarch, triple string) (*TargetSpec, error) {
 			spec.LDFlags = append(spec.LDFlags,
 				"-m", "i386pe",
 				"--image-base", "0x400000",
-				"--major-os-version", "4",
-				"--minor-os-version", "0",
-				"--major-subsystem-version", "4",
-				"--minor-subsystem-version", "0",
-
+				//"--no-leading-underscore", //fixme should exist
+				//"--version",
 			)
+			// -scheduler string -> which scheduler to use (none, tasks, asyncify)
+			// -gc string -> garbage collector to use (none, leaking, conservative)
 		case "amd64":
 			spec.LDFlags = append(spec.LDFlags,
 				"-m", "i386pep",
@@ -384,6 +383,11 @@ func defaultTarget(goos, goarch, triple string) (*TargetSpec, error) {
 			"--gc-sections",
 			"--no-insert-timestamp",
 			"--no-dynamicbase",
+			"--major-os-version", "4",
+			"--minor-os-version", "0",
+			"--major-subsystem-version", "4",
+			"--minor-subsystem-version", "0",
+			"--verbose",
 		)
 	} else if goos == "wasip1" {
 		spec.GC = "" // use default GC

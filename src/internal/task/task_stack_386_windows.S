@@ -16,6 +16,9 @@ _tinygo_startTask:
     // root frame. It avoids bogus extra frames in GDB.
     .cfi_undefined eip
 
+    // https://learn.microsoft.com/en-us/windows-hardware/drivers/debugger/x86-architecture
+    // Functions must preserve all registers, except for eax, ecx, and edx, which can be changed across a function call, and esp, which must be updated according to the calling convention.
+
     // Set the first argument of the goroutine start wrapper, which contains all
     // the arguments.
     pushl %esi

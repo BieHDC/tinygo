@@ -10,7 +10,10 @@ var systemStack uintptr
 // switching between tasks. Also see task_stack_386.S that relies on the exact
 // layout of this struct.
 type calleeSavedRegs struct {
+	// eax no
 	ebx uintptr
+	// ecx no
+	// edx no
 	esi uintptr
 	edi uintptr
 	ebp uintptr
