@@ -1,4 +1,4 @@
-//go:build scheduler.tasks && 386 && !windows
+//go:build scheduler.tasks && 386 && windows
 
 package task
 

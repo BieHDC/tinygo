@@ -427,6 +427,22 @@ func defaultTarget(options *Options) (*TargetSpec, error) {
 		// For more discussion:
 		// https://groups.google.com/g/Golang-nuts/c/Jd9tlNc6jUE/m/Zo-7zIP_m3MJ?pli=1
 		switch options.GOARCH {
+		case "386":
+			// the internet argues for years already
+			// about who is supposed to fix this bug
+			spec.RTLib = "compiler-rt"
+			spec.LDFlags = append(spec.LDFlags,
+				"-m", "i386pe",
+				"--image-base", "0x400000",
+				//
+				"--major-os-version", "4",
+				"--minor-os-version", "0",
+				"--major-subsystem-version", "4",
+				"--minor-subsystem-version", "0",
+			)
+			// to test:
+			// -scheduler string -> which scheduler to use (none, tasks, asyncify)
+			// -gc string -> garbage collector to use (none, leaking, conservative)
 		case "amd64":
 			spec.LDFlags = append(spec.LDFlags,
 				"-m", "i386pep",
@@ -442,6 +458,7 @@ func defaultTarget(options *Options) (*TargetSpec, error) {
 			"--gc-sections",
 			"--no-insert-timestamp",
 			"--no-dynamicbase",
+			"--verbose", // for debugging
 		)
 	case "wasip1":
 		spec.GC = "" // use default GC
@@ -484,7 +501,7 @@ func defaultTarget(options *Options) (*TargetSpec, error) {
 	// Add extra assembly files (needed for the scheduler etc).
 	if options.GOARCH != "wasm" {
 		suffix := ""
-		if options.GOOS == "windows" && options.GOARCH == "amd64" {
+		if options.GOOS == "windows" && (options.GOARCH == "amd64" || options.GOARCH == "386") {
 			// Windows uses a different calling convention on amd64 from other
 			// operating systems so we need separate assembly files.
 			suffix = "_windows"
