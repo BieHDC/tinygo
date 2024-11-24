@@ -259,8 +259,8 @@ func defaultTarget(options *Options) (*TargetSpec, error) {
 	switch options.GOARCH {
 	case "386":
 		llvmarch = "i386"
-		spec.CPU = "pentium4"
-		spec.Features = "+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87"
+		spec.CPU = "i386"
+		spec.Features = "" //"+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87"
 	case "amd64":
 		llvmarch = "x86_64"
 		spec.CPU = "x86-64"

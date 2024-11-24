@@ -68,21 +68,8 @@ func makeMinGWExtraLibs(tmpdir, goarch string) []*compileJob {
 	// files.
 	for _, name := range []string{
 		"kernel32.def.in",
-		"api-ms-win-crt-conio-l1-1-0.def",
-		"api-ms-win-crt-convert-l1-1-0.def.in",
-		"api-ms-win-crt-environment-l1-1-0.def",
-		"api-ms-win-crt-filesystem-l1-1-0.def",
-		"api-ms-win-crt-heap-l1-1-0.def",
-		"api-ms-win-crt-locale-l1-1-0.def",
-		"api-ms-win-crt-math-l1-1-0.def.in",
-		"api-ms-win-crt-multibyte-l1-1-0.def",
-		"api-ms-win-crt-private-l1-1-0.def.in",
-		"api-ms-win-crt-process-l1-1-0.def",
-		"api-ms-win-crt-runtime-l1-1-0.def.in",
-		"api-ms-win-crt-stdio-l1-1-0.def",
-		"api-ms-win-crt-string-l1-1-0.def",
-		"api-ms-win-crt-time-l1-1-0.def",
-		"api-ms-win-crt-utility-l1-1-0.def",
+		"msvcrt.def.in",
+		"ucrtbase.def.in",
 	} {
 		outpath := filepath.Join(tmpdir, filepath.Base(name)+".lib")
 		inpath := filepath.Join(root, "lib/mingw-w64/mingw-w64-crt/lib-common/"+name)
